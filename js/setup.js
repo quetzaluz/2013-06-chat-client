@@ -34,13 +34,11 @@ var fetch = function (time) {
 
 var makeMsg = function (data) {
 	if (data.objectId) {
-		console.log('message added')
 		var $msg = $('<span class="msg"></span>');
 		$msg.text(data.text);
 		$msg.attr('data-id', data.objectId);
 		$msg.prependTo('#viewMsgs');
 		var lastTime = data.createdAt;
-		console.log(lastTime)
 	}
 }
 
@@ -50,8 +48,11 @@ var getUsername = function(){
 }
 
 var send = function (msgText) {
-	$.ajax("https://api.parse.com/1/classes/messages", {
+	console.log('sending...')
+	$.ajax({
+		contentType: 'application/json',
 		type:"POST",
+		url: "https://api.parse.com/1/classes/messages",
 		data: JSON.stringify({text: (getUsername()+ ": "+ msgText)})
 	});
 };
