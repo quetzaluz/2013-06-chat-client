@@ -1,13 +1,15 @@
 
 $(document).ready(function () {
 	fetch();
-  msgIntervalID = setInterval(function () {
-  	fetch(lastTime);
+  msgIntervalID1 = setInterval(function () {
   	$('.msg').each(function () {
-      if (friendList[$(this).attr('data-user')]) {
+      if (friendList[$(this).attr('data-usr')]) {
     	  $(this).toggleClass('friend', true);
       }
     });
+  }, 400);
+  msgIntervalID2 = setInterval(function () {
+  	fetch(lastTime);
   }, 3000);
   $('#textSubmit').on('click', function () {
     msg = $('#textField').val();
@@ -15,11 +17,9 @@ $(document).ready(function () {
   });
   $(document).delegate('.usr', 'click', function () {
   	if (friendList[$(this).attr('data-usr')]) {
-  		console.log('You have friended ' + $(this).attr('data-usr'))
   		friendList[$(this).attr('data-usr')] = false;
   	} else {
   		friendList[$(this).attr('data-usr')] = true;
-      console.log('You are no longer friends with ' +$(this).attr('data-usr'));
   	}
   });
 
