@@ -18,6 +18,12 @@ body {
     display: block;
 }
 
+.usr {
+    display: block;
+    width: 80px;
+    font-weight: bold;
+}
+
 #viewMsgs {
     height: 350px;
     overflow-y: scroll;

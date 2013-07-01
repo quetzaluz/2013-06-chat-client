@@ -21,7 +21,7 @@ var fetch = function (time) {
 	  	if (!lastTime) {lastTime = data.results[99].createdAt}
 			for (var i = 0; i < 100; i++) {
 				if (Date.parse(data.results[i].createdAt) > Date.parse(lastTime)) {
-					makeMsg(data.results[i])
+					makeMsg(data.results[i]);
 				}
 			}
 	  },
@@ -35,8 +35,11 @@ var fetch = function (time) {
 var makeMsg = function (data) {
 	if (data.objectId) {
 		var $msg = $('<span class="msg"></span>');
+		var $usr = $('<span class="usr"></span>')
 		$msg.text(data.text);
+		$usr.text(data.username);
 		$msg.attr('data-id', data.objectId);
+		$usr.prependTo($msg);
 		$msg.prependTo('#viewMsgs');
 		var lastTime = data.createdAt;
 	}
@@ -53,7 +56,10 @@ var send = function (msgText) {
 		contentType: 'application/json',
 		type:"POST",
 		url: "https://api.parse.com/1/classes/messages",
-		data: JSON.stringify({text: (getUsername()+ ": "+ msgText)})
+		//SEE OLD FORMAT BELOW. I believe this is correct, but all of
+		//my classmates have been sending only message text.
+		//data: JSON.stringify({text: (getUsername()+ ": "+ msgText)})
+		data: JSON.stringify({username: getUsername(), text: msgText})
 	});
 };
 
