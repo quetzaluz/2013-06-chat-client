@@ -1,13 +1,6 @@
 
 $(document).ready(function () {
 	fetch();
-  msgIntervalID1 = setInterval(function () {
-  	$('.msg').each(function () {
-      if (friendList[$(this).attr('data-usr')]) {
-    	  $(this).toggleClass('friend', true);
-      }
-    });
-  }, 400);
   msgIntervalID2 = setInterval(function () {
   	fetch(lastTime);
   }, 3000);
@@ -20,6 +13,11 @@ $(document).ready(function () {
   		friendList[$(this).attr('data-usr')] = false;
   	} else {
   		friendList[$(this).attr('data-usr')] = true;
+  		$('.msg').each(function () {
+        if (friendList[$(this).attr('data-usr')]) {
+  	  $(this).toggleClass('friend', true);
+    }
+  });
   	}
   });
 
@@ -57,6 +55,9 @@ var makeMsg = function (data) {
 		$usr.text(data.username);
 		$usr.attr('data-usr', data.username);
 		$msg.attr('data-usr', data.username);
+		if (friendList[data.username]) {
+    	$msg.addClass('friend');
+    }
 		$usr.prependTo($msg);
 		$msg.prependTo('#viewMsgs');
 		var lastTime = data.createdAt;
