@@ -3,14 +3,31 @@ $(document).ready(function () {
 	fetch();
   msgIntervalID = setInterval(function () {
   	fetch(lastTime);
+  	$('.msg').each(function () {
+      if (friendList[$(this).attr('data-user')]) {
+    	  $(this).toggleClass('friend', true);
+      }
+    });
   }, 3000);
   $('#textSubmit').on('click', function () {
-          msg = $('#textField').val();
-          send(msg);
-        });
+    msg = $('#textField').val();
+    send(msg);
+  });
+  $(document).delegate('.usr', 'click', function () {
+  	if (friendList[$(this).attr('data-usr')]) {
+  		console.log('You have friended ' + $(this).attr('data-usr'))
+  		friendList[$(this).attr('data-usr')] = false;
+  	} else {
+  		friendList[$(this).attr('data-usr')] = true;
+      console.log('You are no longer friends with ' +$(this).attr('data-usr'));
+  	}
+  });
+
 });
 
+//Bad global variables, obvious vulnerability in client.
 var lastTime;
+var friendList = {};
 
 var fetch = function (time) {
 	//record time of most recent message, and only publish most recent
@@ -19,7 +36,7 @@ var fetch = function (time) {
 	  contentType: 'application/json',
 	  success: function(data){
 	  	if (!lastTime) {lastTime = data.results[99].createdAt}
-			for (var i = 0; i < 100; i++) {
+			for (var i = 99; i >0; i--) {
 				if (Date.parse(data.results[i].createdAt) > Date.parse(lastTime)) {
 					makeMsg(data.results[i]);
 				}
@@ -38,7 +55,8 @@ var makeMsg = function (data) {
 		var $usr = $('<span class="usr"></span>')
 		$msg.text(data.text);
 		$usr.text(data.username);
-		$msg.attr('data-id', data.objectId);
+		$usr.attr('data-usr', data.username);
+		$msg.attr('data-usr', data.username);
 		$usr.prependTo($msg);
 		$msg.prependTo('#viewMsgs');
 		var lastTime = data.createdAt;
@@ -56,13 +74,9 @@ var send = function (msgText) {
 		contentType: 'application/json',
 		type:"POST",
 		url: "https://api.parse.com/1/classes/messages",
-		//SEE OLD FORMAT BELOW. I believe this is correct, but all of
-		//my classmates have been sending only message text.
-		//data: JSON.stringify({text: (getUsername()+ ": "+ msgText)})
 		data: JSON.stringify({username: getUsername(), text: msgText})
 	});
 };
-
 
 if(!/(&|\?)username=/.test(window.location.search)){
   var newSearch = window.location.search;
