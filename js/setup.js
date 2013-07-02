@@ -1,12 +1,19 @@
 $(document).ready(function () {
 	fetch();
+	$('#usernameField').val(getUsername());
   msgIntervalID = setInterval(function () {
   	fetch(lastTime);
   }, 3000);
+
+  $('#usernameSubmit').on('click', function(e) {
+  	window.location.search = 'username=' + $('#usernameField').val();
+  });
+
   $('#textSubmit').on('click', function (e) {
   	e.preventDefault();
-    msg = $('#textField').val();
+    msg = $('#msgField').val();
     send(msg);
+    $('#msgField').val('')
   });
   $(document).delegate('.usr', 'click', function () {
   	if (friendList[$(this).attr('data-usr')]) {

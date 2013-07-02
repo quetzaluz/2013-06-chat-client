@@ -34,12 +34,20 @@ body {
     overflow-y: scroll;
 }
 
-#textField {
-    width: 79%;
+#msgField {
+    width: 72%;
+}
+
+#usernameField {
+    width: 72%;
 }
 
 #textSubmit {
-    width: 19%;
+    width: 25%;
+}
+
+#usernameSubmit {
+    width: 25%;
 }
 
 #main h1 {
