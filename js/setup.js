@@ -74,7 +74,7 @@ var fetch = function (time) {
 				}	
 	  	} else {
 				for (var i = 99; i >0; i--) {
-					if (Date.parse(data.results[i].createdAt) > Date.parse(lastTime) || data.results[i].room === currentRoom) {
+					if (Date.parse(data.results[i].createdAt) > Date.parse(lastTime) && data.results[i].room === currentRoom) {
 						makeMsg(data.results[i]);
 					}
 				}	
