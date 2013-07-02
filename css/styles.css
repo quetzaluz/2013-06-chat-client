@@ -32,12 +32,16 @@ body {
 .chatroom {
     display: block;
     font-weight: bold;
+    color: white;
+    background: darkgrey;
 }
 
-#defaultRoom {
+.currentRoom {
     color: white;
     background: black;
 }
+
+
 
 #viewMsgs {
     height: 350px;

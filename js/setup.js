@@ -23,9 +23,18 @@ $(document).ready(function () {
     var $room = $('<div class="chatroom"></div>');
     $room.text(roomName);
     $room.attr('id', roomName);
+    $room.addClass('currentRoom');
     currentRoom = roomName;
+    $('.chatroom').each(function() {$(this).removeClass('currentRoom')});
     $('#chatroomField').val('')
     $room.appendTo('#rooms');
+  });
+
+  $(document).delegate('.chatroom', 'click', function () {
+  	console.log('clicked a room')
+  	$('.chatroom').each(function() {$(this).removeClass('currentRoom');});
+  	$(this).addClass('currentRoom');
+  	currentRoom = $(this).attr('id');
   });
 
   $(document).delegate('.usr', 'click', function () {
