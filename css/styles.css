@@ -29,26 +29,32 @@ body {
     font-weight: bold;
 }
 
+.chatroom {
+    display: block;
+    font-weight: bold;
+}
+
+#defaultRoom {
+    color: white;
+    background: black;
+}
+
 #viewMsgs {
     height: 350px;
     overflow-y: scroll;
 }
 
-#msgField {
-    width: 72%;
-}
+#chatroomField {width: 72%;}
 
-#usernameField {
-    width: 72%;
-}
+#msgField {width: 72%;}
 
-#textSubmit {
-    width: 25%;
-}
+#usernameField {width: 72%;}
 
-#usernameSubmit {
-    width: 25%;
-}
+#textSubmit {width: 25%;}
+
+#usernameSubmit {width: 25%;}
+
+#chatroomSubmit {width: 25%;}
 
 #main h1 {
     margin-top: 0;

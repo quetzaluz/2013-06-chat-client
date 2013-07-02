@@ -15,6 +15,19 @@ $(document).ready(function () {
     send(msg);
     $('#msgField').val('')
   });
+
+  $('#chatroomSubmit').on('click', function (e) {
+  	//should have a way to detect duplicate chatroom names
+  	e.preventDefault();
+    roomName = $('#chatroomField').val();
+    var $room = $('<div class="chatroom"></div>');
+    $room.text(roomName);
+    $room.attr('id', roomName);
+    currentRoom = roomName;
+    $('#chatroomField').val('')
+    $room.appendTo('#rooms');
+  });
+
   $(document).delegate('.usr', 'click', function () {
   	if (friendList[$(this).attr('data-usr')]) {
   		friendList[$(this).attr('data-usr')] = false;
@@ -33,6 +46,7 @@ $(document).ready(function () {
 //Bad global variables, obvious vulnerability in client.
 var lastTime;
 var friendList = {};
+var currentRoom = 'default';
 
 var fetch = function (time) {
 	//record time of most recent message, and only publish most recent
@@ -40,12 +54,24 @@ var fetch = function (time) {
 	$.ajax('https://api.parse.com/1/classes/messages?order=-createdAt', {
 	  contentType: 'application/json',
 	  success: function(data){
+	  	//The code below repeats itself to an extent and can probably be
+	  	//refactored to eliminate repitition
 	  	if (!lastTime) {lastTime = data.results[99].createdAt}
-			for (var i = 99; i >0; i--) {
-				if (Date.parse(data.results[i].createdAt) > Date.parse(lastTime)) {
-					makeMsg(data.results[i]);
-				}
-			}
+	  	if (currentRoom === 'default') {
+				for (var i = 99; i >0; i--) {
+					if (Date.parse(data.results[i].createdAt) > Date.parse(lastTime)) {
+						makeMsg(data.results[i]);
+					}
+				}	
+	  	} else {
+				for (var i = 99; i >0; i--) {
+					if (Date.parse(data.results[i].createdAt) > Date.parse(lastTime) || data.results[i].room === currentRoom) {
+						makeMsg(data.results[i]);
+					}
+				}	
+
+	  	}
+	  	
 	  },
 
 	  error: function(data) {
@@ -58,9 +84,7 @@ var makeMsg = function (data) {
 	if (data.objectId) {
 		var $msg = $('<span class="msg"></span>');
 		var $usr = $('<span class="usr"></span>')
-		var usrText = data.username.slice(0, 50);
-		var msgText = data.text.slice(0, 500);
-		$msg.text(msgText);
+		$msg.text(data.text);
 		$usr.text(data.username);
 		$usr.attr('data-usr', data.username);
 		$msg.attr('data-usr', data.username);
@@ -85,7 +109,7 @@ var send = function (msgText) {
 		contentType: 'application/json',
 		type:"POST",
 		url: "https://api.parse.com/1/classes/messages",
-		data: JSON.stringify({text: msgText, username: usr})
+		data: JSON.stringify({text: msgText, username: usr, room: currentRoom})
 	});
 };
 
