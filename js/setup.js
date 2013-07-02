@@ -1,10 +1,10 @@
-
 $(document).ready(function () {
 	fetch();
-  msgIntervalID2 = setInterval(function () {
+  msgIntervalID = setInterval(function () {
   	fetch(lastTime);
   }, 3000);
-  $('#textSubmit').on('click', function () {
+  $('#textSubmit').on('click', function (e) {
+  	e.preventDefault();
     msg = $('#textField').val();
     send(msg);
   });
@@ -15,9 +15,9 @@ $(document).ready(function () {
   		friendList[$(this).attr('data-usr')] = true;
   		$('.msg').each(function () {
         if (friendList[$(this).attr('data-usr')]) {
-  	  $(this).toggleClass('friend', true);
-    }
-  });
+  	      $(this).toggleClass('friend', true);
+        }
+      });
   	}
   });
 
@@ -71,11 +71,12 @@ var getUsername = function(){
 
 var send = function (msgText) {
 	console.log('sending...')
-	$.ajax({
+	var usr = getUsername();
+	return $.ajax({
 		contentType: 'application/json',
 		type:"POST",
 		url: "https://api.parse.com/1/classes/messages",
-		data: JSON.stringify({username: getUsername(), text: msgText})
+		data: JSON.stringify({text: msgText})
 	});
 };
 
