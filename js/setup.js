@@ -51,7 +51,8 @@ var makeMsg = function (data) {
 	if (data.objectId) {
 		var $msg = $('<span class="msg"></span>');
 		var $usr = $('<span class="usr"></span>')
-		$msg.text(data.text);
+		var msgText = data.text.slice(0, 500);
+		$msg.text(msgText);
 		$usr.text(data.username);
 		$usr.attr('data-usr', data.username);
 		$msg.attr('data-usr', data.username);
@@ -76,7 +77,7 @@ var send = function (msgText) {
 		contentType: 'application/json',
 		type:"POST",
 		url: "https://api.parse.com/1/classes/messages",
-		data: JSON.stringify({text: msgText})
+		data: JSON.stringify({text: msgText, username: usr})
 	});
 };
 
